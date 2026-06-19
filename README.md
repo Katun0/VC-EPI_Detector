@@ -63,12 +63,7 @@ Classes utilizadas:
 |----|---------|
 | 0 | Person |
 | 1 | Helmet |
-| 2 | Vest |
-| 3 | Gloves |
-| 4 | Goggles |
-| 5 | Mask |
-| 6 | Boots |
-
+| 2 | Goggles |
 ---
 
 ## 🖼 Processamento de Imagem
@@ -250,13 +245,10 @@ Status: Não Conforme
 ## 📈 Funcionalidades Futuras
 
 - Upload de vídeos
-- Relatórios em PDF
-- Exportação CSV
 - Captura automática de infrações
 - Dashboard estatístico
 - Rastreamento de pessoas
 - Banco de dados para histórico de eventos
-- Integração com câmeras IP
 - Notificações em tempo real
 
 ---
@@ -295,11 +287,11 @@ Status: Não Conforme
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 Projeto desenvolvido para fins acadêmicos na disciplina de Visão Computacional.
 
-Aluno: **Seu Nome**
+Alunos: **João Victor Surdi, Vinicius Fantin, Sara Gibmaier**
 
 Instituição: **Sua Instituição**
 
