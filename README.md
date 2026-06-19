@@ -293,6 +293,6 @@ Projeto desenvolvido para fins acadêmicos na disciplina de Visão Computacional
 
 Alunos: **João Victor Surdi, Vinicius Fantin, Sara Gibmaier**
 
-Instituição: **Sua Instituição**
+Instituição: **UNOESC - Campus Videira**
 
 Ano: **2026**
