@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Analysis Dashboard</title>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+    <!-- Com o flask talvez utilizaria assim: <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+  </head>
+  <body>
+    <div class="container">
+      <!-- Cabeção e os Botão -->
+      <div class="header">
+        <button id="btn-webcam">
+          <span class="status-dot"></span>
+          Abrir WebCam
+        </button>
+        <button id="btn-import">Importar Vídeo</button>
+      </div>
+      <input type="file" id="video-input" accept="video/*" hidden />
+      <input type="file" id="image-input" accept="image/*" hidden />
+
+      <div class="video-player">
+        <img
+          id="video-feed"
+          src=""
+          alt="Vídeo"
+          style="width: 100%; height: 100%; object-fit: contain"
+        />
+      </div>
+
+      <!-- Dados -->
+      <div class="inference-data">
+        <span>Dados de Inferência &bull; Gráficos Matplotlib</span>
+      </div>
+    </div>
+  </body>
+</html>
+<script src="{{ url_for('static', filename='js/buttons.js') }}"></script>
+<!-- Não precisaria ter um javascript?  -->
