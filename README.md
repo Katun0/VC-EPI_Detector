@@ -57,7 +57,17 @@ O sistema pode ser treinado para reconhecer os seguintes equipamentos:
 
 A detecção é realizada utilizando o modelo YOLOv8.
 
-Classes utilizadas:
+O pipeline é **agnóstico ao modelo**: ele lê as classes diretamente do modelo carregado.
+
+- Com o `yolov8n.pt` base (COCO), o sistema detecta **pessoas** e roda todo o
+  pipeline (métricas, conformidade, interface, processamento).
+- Ao colocar um modelo treinado em EPIs em `models/best.pt`, o sistema passa a
+  detectar **capacete, colete, óculos, etc.** automaticamente, e a verificação de
+  conformidade torna-se efetiva.
+
+Ordem de carregamento do modelo: `models/best.pt` → `models/yolov8n.pt` → `yolov8n.pt`.
+
+Classes de exemplo:
 
 | ID | Classe |
 |----|---------|
@@ -115,17 +125,17 @@ cd epi-detector
 Linux:
 
 ```bash
-python3 -m venv venv
+python3 -m .venv .venv
 
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 Windows:
 
 ```bash
-python -m venv venv
+python -m .venv .venv
 
-venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
 ### Instalar dependências
@@ -144,6 +154,7 @@ opencv-python
 flask
 numpy
 pandas
+matplotlib
 ```
 
 ---
@@ -169,7 +180,7 @@ runs/detect/train/weights/best.pt
 Copie o arquivo para:
 
 ```text
-model/best.pt
+models/best.pt
 ```
 
 ---

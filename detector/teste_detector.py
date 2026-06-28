@@ -1,18 +1,44 @@
-import cv2
+"""
+Teste de fumaça do pipeline de detecção.
 
-from detector import EPIDetector
+Roda o detector em um frame sintético (sem precisar de webcam ou arquivo)
+e valida que a inferência, as métricas e a verificação de conformidade
+funcionam de ponta a ponta.
 
-detector = EPIDetector(
-    model_path="yolov8n.pt",
-    confidence=0.5
-)
+Uso:
+    python -m detector.teste_detector
+"""
 
-imagem = cv2.imread("tem que testar depois com uma imagem")
+import numpy as np
 
-resultado, detections = detector.predict(imagem)
+from detector import EPIDetector, MetricsTracker, ComplianceChecker, ImageProcessor
 
-cv2.imshow("Resultado", resultado)
 
-cv2.waitKey(0)
+def main():
+    # frame sintético (640x480, ruído) só para exercitar o pipeline
+    frame = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
 
-cv2.destroyAllWindows()
+    detector = EPIDetector(confidence=0.25)
+    checker = ComplianceChecker()
+    metrics = MetricsTracker()
+    processor = ImageProcessor()
+
+    annotated, detections, inference_ms, compliance = detector.predict(
+        frame, checker=checker
+    )
+    metrics.update(inference_ms, detections, compliance)
+
+    # exercita o processamento de imagem
+    grid = processor.debug_grid(frame)
+
+    print(f"[OK] Inferência: {inference_ms:.1f} ms")
+    print(f"[OK] Detecções: {len(detections)}")
+    print(f"[OK] Conformidade: {compliance}")
+    print(f"[OK] Frame anotado: {annotated.shape}")
+    print(f"[OK] Mosaico de processamento: {grid.shape}")
+    print(f"[OK] Snapshot de métricas: {metrics.snapshot()}")
+    print("[OK] Teste de fumaça concluído com sucesso.")
+
+
+if __name__ == "__main__":
+    main()

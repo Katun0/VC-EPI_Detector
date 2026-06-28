@@ -116,10 +116,11 @@ button:active
     font-size: 14px;
 }
 
-.inference-data 
+.inference-data
 {
     width: 100%;
-    min-height: 140px;
+    min-height: 220px;
+    height: 240px;
     background-color: rgba(15, 23, 42, 0.5);
     border: 1px solid var(--border-color);
     border-radius: 20px;
@@ -129,12 +130,113 @@ button:active
     padding: 20px;
 }
 
-.inference-data span 
+.inference-data span
 {
     color: var(--accent-color);
     font-size: 16px;
     font-weight: 400;
     opacity: 0.8;
+}
+
+/* Painel de métricas */
+.metrics-grid
+{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.metric-card
+{
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+}
+
+.metric-card.alert
+{
+    border-color: #ef4444;
+}
+
+.metric-value
+{
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.metric-card.alert .metric-value
+{
+    color: #ef4444;
+}
+
+.metric-label
+{
+    margin-top: 4px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+}
+
+/* Painel de resultado (imagem / processamento) */
+.result-panel
+{
+    width: 100%;
+    background-color: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.result-panel h3
+{
+    margin: 0 0 12px;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.result-panel img
+{
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+#compliance-list
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.comp-card
+{
+    flex: 1 1 200px;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    background-color: rgba(15, 23, 42, 0.6);
+}
+
+.comp-card.ok    { border-left: 4px solid #10b981; }
+.comp-card.bad   { border-left: 4px solid #ef4444; }
+
+.comp-detail
+{
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.muted { color: var(--text-muted); }
+
+#video-placeholder
+{
+    position: absolute;
 }
 
 /* Outros Ajustes */
