@@ -7,29 +7,24 @@ class EPIDetector:
 
     def __init__(self, model_path=None, confidence=0.5):
 
-        # Procura primeiro um modelo treinado em EPIs (best.pt); se não houver,
-        # usa o YOLOv8n base (detecta pessoas e serve de fallback).
-        if model_path is None:
-            candidates = [
-                os.path.join("models", "best.pt"),
-                os.path.join("models", "yolov8n.pt"),
-                "yolov8n.pt",
-            ]
-            model_path = next((c for c in candidates if os.path.exists(c)),
-                              "yolov8n.pt")
 
-        print(f"[INFO] Carregando modelo: {model_path}")
-
-        self.model = YOLO(model_path)
-        self.personmodel = YOLO(os.path.join("models", "yolov8n.pt"))
+        self.ppe_model = YOLO(os.path.join("models", "best.pt"))
+        self.person_model = YOLO(os.path.join("models", "yolov8n.pt"))
         self.confidence = confidence
 
         # nomes das classes do modelo
-        self.class_names = self.model.names
+        self.person_classes = self.person_model.names
+        self.ppe_classes = self.ppe_model.names
+
+        print("Classes do modelo PPE:")
+        print(self.ppe_model.names)
+
+        print("\nClasses do modelo de pessoas:")
+        print(self.person_model.names)
 
     def detect_ppe(self, frame):
 
-        return self.model(
+        return self.ppe_model(
             frame,
             conf=self.confidence,
             verbose=False
@@ -37,7 +32,7 @@ class EPIDetector:
     
     def detect_persons(self, frame):
 
-        return self.personmodel(
+        return self.person_model(
             frame,
             conf=self.confidence,
             classes=[0],          # apenas person
@@ -99,6 +94,7 @@ class EPIDetector:
         ) * 1000
 
         detections = []
+
         for result in person_results:
             for box in result.boxes:
                 detections.append({
@@ -139,7 +135,7 @@ class EPIDetector:
             "vest": (0, 255, 255),
             "mask": (255, 0, 0),
             "gloves": (0, 165, 255),
-            "boots": (128, 0, 255),
+            "safety_shoe": (128, 0, 255),
         }
 
         return colors.get(label.lower(), (255, 255, 255))
@@ -158,3 +154,19 @@ class EPIDetector:
             det for det in detections
             if det["class"] == "person"
         ]
+    
+    def split_detections(self, detections):
+        persons = []
+        epis = []
+
+        for det in detections:
+
+            if det["class"] == "person":
+
+                persons.append(det)
+
+            else:
+
+                epis.append(det)
+
+        return persons, epis

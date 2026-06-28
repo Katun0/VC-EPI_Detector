@@ -47,6 +47,9 @@ def start_webcam():
 
     return jsonify({"success": True})
 
+@app.route("/stop_webcam")
+def stop_webcam():
+    return
 
 @app.route("/upload_video", methods=["POST"])
 def upload_video():
