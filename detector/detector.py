@@ -5,7 +5,7 @@ import os
 
 class EPIDetector:
 
-    def __init__(self, model_path=None, confidence=0.5):
+    def __init__(self, model_path=None, confidence=0.2):
 
 
         self.ppe_model = YOLO(os.path.join("models", "best.pt"))

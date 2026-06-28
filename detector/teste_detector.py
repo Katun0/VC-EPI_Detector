@@ -1,44 +1,25 @@
-"""
-Teste de fumaça do pipeline de detecção.
+from ultralytics import YOLO
+import cv2
 
-Roda o detector em um frame sintético (sem precisar de webcam ou arquivo)
-e valida que a inferência, as métricas e a verificação de conformidade
-funcionam de ponta a ponta.
+model = YOLO("models/best.pt")
+print(model.names)
 
-Uso:
-    python -m detector.teste_detector
-"""
+img = cv2.imread("static/uploads/annotated_images (1).jpg")
 
-import numpy as np
+results = model(img)
 
-from detector import EPIDetector, MetricsTracker, ComplianceChecker, ImageProcessor
+for result in results:
 
+    print("Boxes:", len(result.boxes))
 
-def main():
-    # frame sintético (640x480, ruído) só para exercitar o pipeline
-    frame = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
+    for box in result.boxes:
 
-    detector = EPIDetector(confidence=0.25)
-    checker = ComplianceChecker()
-    metrics = MetricsTracker()
-    processor = ImageProcessor()
+        print(
+            model.names[int(box.cls[0])],
+            float(box.conf[0])
+        )
 
-    annotated, detections, inference_ms, compliance = detector.predict(
-        frame, checker=checker
-    )
-    metrics.update(inference_ms, detections, compliance)
+img = results[0].plot()
 
-    # exercita o processamento de imagem
-    grid = processor.debug_grid(frame)
-
-    print(f"[OK] Inferência: {inference_ms:.1f} ms")
-    print(f"[OK] Detecções: {len(detections)}")
-    print(f"[OK] Conformidade: {compliance}")
-    print(f"[OK] Frame anotado: {annotated.shape}")
-    print(f"[OK] Mosaico de processamento: {grid.shape}")
-    print(f"[OK] Snapshot de métricas: {metrics.snapshot()}")
-    print("[OK] Teste de fumaça concluído com sucesso.")
-
-
-if __name__ == "__main__":
-    main()
+cv2.imshow("Resultado", img)
+cv2.waitKey(0)
