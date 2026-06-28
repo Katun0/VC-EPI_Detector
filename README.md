@@ -302,7 +302,7 @@ Status: Não Conforme
 
 Projeto desenvolvido para fins acadêmicos na disciplina de Visão Computacional.
 
-Alunos: **João Victor Surdi, Vinicius Fantin, Sara Gibmaier**
+Alunos: **João Victor Surdi, Vinicius Fantin, Sara Gibmaier, Gabriel de Oliveira**
 
 Instituição: **UNOESC - Campus Videira**
 
