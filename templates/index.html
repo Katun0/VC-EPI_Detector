@@ -3,43 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EPI Detector &bull; Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Sistema Inteligente de Detecção de EPIs</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="container">
       <!-- Cabeçalho e botões -->
       <div class="header">
-        <button id="btn-webcam">
-          <span class="status-dot"></span>
-          Abrir WebCam
-        </button>
-        <button id="btn-import">Importar Vídeo</button>
-        <button id="btn-import-image">Importar Imagem</button>
-        <button id="btn-processing">Processamento</button>
-        <button id="btn-reset">Zerar Métricas</button>
+        <div class="header-title">
+          <h1>VisionGuard AI</h1>
+
+          <span> Sistema Inteligente de Detecção e Conformidade de EPIs </span>
+        </div>
+
+        <div class="header-actions">
+          <button id="btn-import">Importar Vídeo</button>
+          <button id="btn-import-image">Importar Imagem</button>
+          <button id="btn-processing">Processamento</button>
+          <button id="btn-reset">Nova Análise</button>
+        </div>
       </div>
       <input type="file" id="video-input" accept="video/*" hidden />
       <input type="file" id="image-input" accept="image/*" hidden />
 
       <div class="video-player">
-        <img
-          id="video-feed"
-          src=""
-          alt="Vídeo"
-          style="width: 100%; height: 100%; object-fit: contain"
-        />
-        <span id="video-placeholder">Selecione uma fonte de vídeo ou imagem</span>
+        <img id="video-feed" src="" alt="Vídeo" />
+        <span id="video-placeholder"
+          >Selecione uma fonte de vídeo ou imagem</span
+        >
       </div>
 
       <!-- Painel de métricas -->
       <div class="metrics-grid">
-        <div class="metric-card"><div class="metric-value" id="m-fps">0</div><div class="metric-label">FPS</div></div>
-        <div class="metric-card"><div class="metric-value" id="m-inf">0</div><div class="metric-label">Inferência (ms)</div></div>
-        <div class="metric-card"><div class="metric-value" id="m-people">0</div><div class="metric-label">Pessoas</div></div>
-        <div class="metric-card"><div class="metric-value" id="m-ok">0</div><div class="metric-label">Conformes</div></div>
-        <div class="metric-card alert"><div class="metric-value" id="m-alerts">0</div><div class="metric-label">Alertas</div></div>
+        <div class="metric-card">
+          <div class="metric-value" id="m-fps">0</div>
+          <div class="metric-label">FPS</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="m-inf">0</div>
+          <div class="metric-label">Inferência (ms)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="m-people">0</div>
+          <div class="metric-label">Pessoas</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="m-ok">0</div>
+          <div class="metric-label">Conformes</div>
+        </div>
+        <div class="metric-card alert">
+          <div class="metric-value" id="m-alerts">0</div>
+          <div class="metric-label">Alertas</div>
+        </div>
       </div>
 
       <!-- Gráfico ao vivo -->
@@ -49,6 +68,9 @@
 
       <!-- Resultado de imagem / processamento -->
       <div id="result-panel" class="result-panel" hidden>
+        <div class="result-toolbar">
+          <button id="btn-back" hidden>← Voltar para Detecção</button>
+        </div>
         <h3 id="result-title">Resultado</h3>
         <img id="result-image" src="" alt="Resultado" />
         <div id="compliance-list"></div>

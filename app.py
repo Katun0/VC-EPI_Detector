@@ -33,23 +33,23 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/start_webcam")
-def start_webcam():
+# @app.route("/start_webcam")
+# def start_webcam():
 
-    global camera, video_source
+#     global camera, video_source
 
-    video_source = 0
-    if camera is not None:
-        camera.release()
-    camera = None
+#     video_source = 0
+#     if camera is not None:
+#         camera.release()
+#     camera = None
 
-    metrics.reset()
+#     metrics.reset()
 
-    return jsonify({"success": True})
+#     return jsonify({"success": True})
 
-@app.route("/stop_webcam")
-def stop_webcam():
-    return
+# @app.route("/stop_webcam")
+# def stop_webcam():
+#     return
 
 @app.route("/upload_video", methods=["POST"])
 def upload_video():
@@ -84,11 +84,41 @@ def upload_image():
     file.save(path)
 
     image = cv2.imread(path)
+    global last_frame
+
+    with frame_lock:
+        last_frame = image.copy()
+        
+    MAX_WIDTH = 1280
+    MAX_HEIGHT = 720
+
+    h, w = image.shape[:2]
+
+    scale = min(
+        MAX_WIDTH / w,
+        MAX_HEIGHT / h,
+        1.0
+    )
+
+    if scale < 1:
+
+        image = cv2.resize(
+            image,
+            (int(w * scale), int(h * scale)),
+            interpolation=cv2.INTER_AREA
+        )
     if image is None:
         return jsonify({"success": False, "message": "Não foi possível ler a imagem."})
 
     annotated, detections, inference_ms, compliance = detector.predict(
         image, checker=compliance_checker
+    )
+    metrics.reset()
+
+    metrics.update(
+        inference_ms,
+        detections,
+        compliance
     )
 
     # salva a imagem anotada
@@ -120,6 +150,17 @@ def generate_frames():
     while True:
 
         success, frame = camera.read()
+        h, w = frame.shape[:2]
+
+        scale = min(
+        1280 / w,
+        720 / h
+        )
+
+        frame = cv2.resize(
+            frame,
+            (int(w * scale), int(h * scale))
+        )
         if not success:
             break
 
@@ -161,9 +202,20 @@ def get_metrics():
     return jsonify(metrics.snapshot())
 
 
-@app.route("/reset_metrics")
-def reset_metrics():
+@app.route("/reset", methods=["POST"])
+def reset():
+
+    global last_frame, camera
+
     metrics.reset()
+
+    with frame_lock:
+        last_frame = None
+
+    if camera is not None:
+        camera.release()
+        camera = None
+
     return jsonify({"success": True})
 
 
@@ -184,7 +236,7 @@ def processing_demo():
 
 @app.route("/report.png")
 def report():
-    """Gráfico Matplotlib com distribuição de detecções e desempenho."""
+    # Gráfico Matplotlib com distribuição de detecções e desempenho.
     snap = metrics.snapshot()
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))

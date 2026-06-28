@@ -54,10 +54,42 @@ body
 }
 
 /* Cabeção */
-.header 
+.header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.header-title
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title h1
+{
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: -1px;
+}
+
+.header-title span
+{
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 14px;
+    letter-spacing: .4px;
+}
+
+.header-actions
 {
     display: flex;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 button 
@@ -90,6 +122,15 @@ button:active
 }
 
 /* Player e dados */
+#video-feed
+{
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    max-height: 100%;
+}
 .video-player 
 {
     width: 100%;
@@ -201,8 +242,23 @@ button:active
 .result-panel img
 {
     width: 100%;
+    max-height: 550px;
+    object-fit: contain;
+
     border-radius: 12px;
     border: 1px solid var(--border-color);
+    background: #000;
+}
+
+.result-toolbar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:12px;
+}
+
+#btn-back{
+    padding:8px 18px;
+    font-size:13px;
 }
 
 #compliance-list
