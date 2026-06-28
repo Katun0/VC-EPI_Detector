@@ -17,7 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultImage = document.getElementById("result-image");
   const complianceList = document.getElementById("compliance-list");
 
-  // Guarda a última detecção para poder voltar
+  // ==========================================================
+  // Guarda o último estado
+  // ==========================================================
+  let lastMode = ""; // "video" ou "image"
   let lastDetectionImage = "";
   let lastInference = "";
   let lastCompliance = null;
@@ -26,14 +29,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // STREAM DE VÍDEO
   // ==========================================================
   function showStream() {
+
     videoFeed.src = "/video_feed?" + Date.now();
+
     placeholder.style.display = "none";
+
     resultPanel.hidden = true;
+
   }
 
   btnImport.addEventListener("click", () => videoInput.click());
+
   btnImportImage.addEventListener("click", () => imageInput.click());
 
+  // ==========================================================
+  // IMPORTAÇÃO DE VÍDEO
+  // ==========================================================
   videoInput.addEventListener("change", async () => {
 
     if (videoInput.files.length === 0) return;
@@ -50,10 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       ).json();
 
-      if (data.success)
-        showStream();
-      else
+      if (!data.success) {
         alert(data.message);
+        return;
+      }
+
+      lastMode = "video";
+
+      showStream();
 
     } catch (e) {
 
@@ -88,7 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Salva para poder voltar depois
+      lastMode = "image";
+
       lastDetectionImage = data.annotated_url;
       lastInference = data.inference_ms;
       lastCompliance = data.compliance;
@@ -132,19 +148,33 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ==========================================================
-  // VOLTAR PARA A DETECÇÃO
+  // VOLTAR PARA DETECÇÃO
   // ==========================================================
   btnBack.addEventListener("click", () => {
 
-    if (!lastDetectionImage) return;
+    if (lastMode === "video") {
 
-    resultTitle.textContent =
-      `Resultado da imagem (inferência ${lastInference} ms)`;
+      resultPanel.hidden = true;
 
-    resultImage.src =
-      lastDetectionImage + "?" + Date.now();
+      showStream();
 
-    renderCompliance(lastCompliance);
+      return;
+
+    }
+
+    if (lastMode === "image") {
+
+      resultTitle.textContent =
+        `Resultado da imagem (inferência ${lastInference} ms)`;
+
+      resultImage.src =
+        lastDetectionImage + "?" + Date.now();
+
+      renderCompliance(lastCompliance);
+
+      resultPanel.hidden = false;
+
+    }
 
   });
 
@@ -169,6 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
     imageInput.value = "";
     videoInput.value = "";
 
+    lastMode = "";
     lastDetectionImage = "";
     lastInference = "";
     lastCompliance = null;
@@ -242,9 +273,13 @@ document.addEventListener("DOMContentLoaded", () => {
       labels: [],
 
       datasets: [{
+
         label: "Detecções por classe",
+
         data: [],
+
         backgroundColor: "#38bdf8"
+
       }]
 
     },
@@ -273,9 +308,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         x: {
 
-          ticks: { color: "#94a3b8" },
+          ticks: {
 
-          grid: { color: "#334155" }
+            color: "#94a3b8"
+
+          },
+
+          grid: {
+
+            color: "#334155"
+
+          }
 
         },
 
@@ -283,9 +326,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
           beginAtZero: true,
 
-          ticks: { color: "#94a3b8" },
+          ticks: {
 
-          grid: { color: "#334155" }
+            color: "#94a3b8"
+
+          },
+
+          grid: {
+
+            color: "#334155"
+
+          }
 
         }
 
